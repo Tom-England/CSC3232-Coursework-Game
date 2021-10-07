@@ -29,7 +29,7 @@ public class ScrPlayerController : MonoBehaviour
         float y_axis = Input.GetAxis("Vertical");
         float x_axis = Input.GetAxis("Horizontal");
         bool jump_flag = Input.GetButtonDown("Jump");
-
+        if (in_air) { jump_flag = false; }
         if (y_axis == 0 && x_axis == 0 && !jump_flag)
         {
             // No Movement
@@ -40,9 +40,14 @@ public class ScrPlayerController : MonoBehaviour
             // Movement
             playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
             playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
+            if (!in_air)
+            {
+                playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
+                in_air = !in_air;
+            };
 
             // Handle Jump
-            if (jump_flag && !in_air)
+            if (jump_flag)
             {
                 playerRB.AddForce(Vector3.up * jump_force, ForceMode.Force);
                 in_air = true;
