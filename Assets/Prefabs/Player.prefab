@@ -61,6 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jump_force: 300
   playerRB: {fileID: 0}
+  mesh: {fileID: 5750739714219179323}
 --- !u!54 &4832312496199222081
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -181,6 +182,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 43bf29cac9757fb419f701d60345144d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 201d3db299e79ce40ba31f61da0f1241, type: 3}
+--- !u!1 &5750739714219179323 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 201d3db299e79ce40ba31f61da0f1241,
+    type: 3}
+  m_PrefabInstance: {fileID: 4832312495900115050}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4937471183805458305 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 201d3db299e79ce40ba31f61da0f1241,

@@ -1,26 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class ScrPlayerController : MonoBehaviour
 {
 
     float speed = 4f;
     public float jump_force = 100f;
     bool in_air = false;
+    bool in_air_bob = false;
     public Rigidbody playerRB;
+    public GameObject mesh;
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
         {
             in_air = false;
+            in_air_bob = false;
         }
     }
 
     Vector3 GetPos()
     {
         return playerRB.transform.position;
+    }
+
+    // Takes in the x and y values from player input and rotates the player to face in the direction of movement
+    void RotatePlayer(float x, float y)
+    {
+        Vector3 direction = new Vector3(x, 0, y);
+        Vector3 direction_normal = direction.normalized;
+        //Debug.Log(direction_normal);
+        var headingChange = Quaternion.FromToRotation(Vector3.left, direction_normal);
+        mesh.transform.localRotation = headingChange;
     }
 
     // Handles player movement each frame, returns true if the player moved and false if they did not.
@@ -37,21 +50,24 @@ public class ScrPlayerController : MonoBehaviour
         }
         else
         {
-            // Movement
-            playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
-            playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
-            // Bobbing animation
-            if (!in_air)
-            {
-                playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
-                in_air = !in_air;
-            };
-
             // Handle Jump
             if (jump_flag)
             {
                 playerRB.AddForce(Vector3.up * jump_force, ForceMode.Force);
                 in_air = true;
+            }
+            else
+            {
+                // Movement
+                playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
+                playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
+                RotatePlayer(x_axis, y_axis);
+                // Bobbing animation
+                if (!in_air_bob)
+                {
+                    playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
+                    in_air_bob = !in_air_bob;
+                };
             }
             return true;
         }
