@@ -5,14 +5,13 @@ using UnityEngine;
 public class ScrPlayerController : MonoBehaviour
 {
 
-    float speed = 10f;
+    float speed = 4f;
     public float jump_force = 100f;
     bool in_air = false;
     public Rigidbody playerRB;
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
         if (collision.gameObject.name == "Floor")
         {
             in_air = false;
