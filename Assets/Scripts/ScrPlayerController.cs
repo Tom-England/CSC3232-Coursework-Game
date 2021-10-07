@@ -18,14 +18,17 @@ public class ScrPlayerController : MonoBehaviour
     {
         float y_axis = Input.GetAxis("Vertical");
         float x_axis = Input.GetAxis("Horizontal");
-        playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
-        playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
+
         if (y_axis == 0 && x_axis == 0)
         {
+            // No Movement
             return false;
         }
         else
         {
+            // Movement
+            playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
+            playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
             return true;
         }
     }
