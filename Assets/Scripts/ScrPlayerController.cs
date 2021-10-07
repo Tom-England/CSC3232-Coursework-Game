@@ -12,7 +12,7 @@ public class ScrPlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Floor")
+        if (collision.gameObject.tag == "Floor")
         {
             in_air = false;
         }
@@ -40,6 +40,7 @@ public class ScrPlayerController : MonoBehaviour
             // Movement
             playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
             playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
+            // Bobbing animation
             if (!in_air)
             {
                 playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
