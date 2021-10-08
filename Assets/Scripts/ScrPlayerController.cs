@@ -19,6 +19,15 @@ public class ScrPlayerController : MonoBehaviour
             in_air = false;
             in_air_bob = false;
         }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Damage")
+        {
+            Debug.Log("Ow");
+        }
     }
 
     Vector3 GetPos()
