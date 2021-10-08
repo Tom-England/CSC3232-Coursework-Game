@@ -6,11 +6,15 @@ public class ScrDamageZone : MonoBehaviour
 {
 
     public BoxCollider col;
+    public bool showInspectorBox = true;
 
     // Fills the box collider in with red in the inspector.
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position, col.size);
+        if (showInspectorBox)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(transform.position, col.size);
+        }
     }
 }
