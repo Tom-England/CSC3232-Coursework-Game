@@ -11,6 +11,7 @@ public class ScrPlayerController : MonoBehaviour
     bool in_air_bob = false;
     public Rigidbody playerRB;
     public GameObject mesh;
+    public GameObject attackbox;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -41,7 +42,7 @@ public class ScrPlayerController : MonoBehaviour
         Vector3 direction_normal = direction.normalized;
         //Debug.Log(direction_normal);
         var headingChange = Quaternion.FromToRotation(Vector3.left, direction_normal);
-        mesh.transform.localRotation = headingChange;
+        transform.localRotation = headingChange;
     }
 
     // Handles player movement each frame, returns true if the player moved and false if they did not.
@@ -81,15 +82,34 @@ public class ScrPlayerController : MonoBehaviour
         }
     }
 
+    bool HandleAttack()
+    {
+
+        bool attack_flag = Input.GetButtonDown("Fire1");
+        if (attack_flag)
+        {
+            attackbox.SetActive(true);
+            Debug.Log("pow");
+
+        }
+        else
+        {
+            attackbox.SetActive(false);
+        }
+        return attack_flag;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
+        attackbox.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleMovement();
+        HandleAttack();
     }
 }
