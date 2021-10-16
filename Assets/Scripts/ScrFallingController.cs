@@ -8,6 +8,7 @@ public class ScrFallingController : MonoBehaviour
 {
 
     public Vector3 area = new Vector3(10, 1, 10);
+    public float height;
     public Double spawn_timer = 5f;
     Double elapsed_time = 0;
 
@@ -35,10 +36,13 @@ public class ScrFallingController : MonoBehaviour
             new_pos.x += (float)offset_x;
             new_pos.z += (float)offset_z;
 
-            new_pos.y += 20;
+            new_pos.y += height;
 
             int hazard_index = rnd.Next(hazards.Length);
-            Instantiate(hazards[hazard_index], new_pos, Quaternion.identity);
+            GameObject obj;
+            obj = Instantiate(hazards[hazard_index], new_pos, Quaternion.identity);
+            obj.transform.Rotate(20 * Time.deltaTime, 10 * Time.deltaTime, 50 * Time.deltaTime);
+            Destroy(obj, 10);
         }
         else
         {
@@ -55,6 +59,7 @@ public class ScrFallingController : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawCube(transform.position, area);
+            Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + height, transform.position.z), 1);
         }
     }
 }
