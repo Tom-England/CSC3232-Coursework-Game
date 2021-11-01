@@ -1,17 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 public class ScrPlayerController : MonoBehaviour
 {
 
-    float speed = 4f;
+    float speed = 5f;
     public float jump_force = 100f;
     bool in_air = false;
     bool in_air_bob = false;
     public Rigidbody playerRB;
     public GameObject mesh;
+
+    // Player Attack Variables
     public GameObject attackbox;
+    bool attack_flag = false;
+    float max_attack_time_on = 1f;
+    float attack_time_on = 0f;
+
+    // Player Lives Variables
+    static int max_lives = 3;
+    int lives = 3;
+    static float max_inv_time = 1f;
+    float current_inv_time = 0f;
+    public Image[] live_graphics;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -27,6 +40,32 @@ public class ScrPlayerController : MonoBehaviour
         if (other.gameObject.tag == "Damage")
         {
             Debug.Log("Ow");
+            if (current_inv_time == 0)
+            {
+                lives -= 1;
+                current_inv_time = max_inv_time;
+                UpdateLives();
+            }
+        }
+    }
+
+    void UpdateLives()
+    {
+        if (lives <= 0)
+        {
+            Debug.Log("Dead");
+        }
+        for (int i = 0; i < max_lives; i++)
+        {
+            if (i < lives)
+            {
+                live_graphics[i].enabled = true;
+            }
+            else
+            {
+                live_graphics[i].enabled = false;
+            }
+
         }
     }
 
@@ -84,17 +123,28 @@ public class ScrPlayerController : MonoBehaviour
 
     bool HandleAttack()
     {
-
-        bool attack_flag = Input.GetButtonDown("Fire1");
+        attack_flag = Input.GetButtonDown("Fire1");
         if (attack_flag)
         {
             attackbox.SetActive(true);
-            Debug.Log("pow");
+            attack_time_on = max_attack_time_on;
+            //Debug.Log("pow");
 
         }
         else
         {
-            attackbox.SetActive(false);
+            if (attack_time_on == 0)
+            {
+                attackbox.SetActive(false);
+            }
+            else
+            {
+                attack_time_on -= Time.deltaTime;
+                if (attack_time_on < 0)
+                {
+                    attack_time_on = 0;
+                }
+            }
         }
         return attack_flag;
     }
@@ -111,5 +161,13 @@ public class ScrPlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleAttack();
+        if (current_inv_time > 0)
+        {
+            current_inv_time -= Time.deltaTime;
+            if (current_inv_time < 0)
+            {
+                current_inv_time = 0;
+            }
+        }
     }
 }

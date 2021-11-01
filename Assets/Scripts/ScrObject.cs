@@ -14,7 +14,6 @@ public class ScrObject : MonoBehaviour
     {
         if (other.gameObject.tag == "Attack")
         {
-            Debug.Log("Hit");
             Vector3 dir = CalculateDirection(other.transform.position);
             GetComponent<Rigidbody>().AddForce(dir * -500, ForceMode.Force);
         }
