@@ -6,7 +6,7 @@ using System;
 public class ScrPlayerController : MonoBehaviour
 {
 
-    float speed = 5f;
+    public float speed = 3f;
     public float jump_force = 100f;
     bool in_air = false;
     bool in_air_bob = false;
@@ -26,6 +26,9 @@ public class ScrPlayerController : MonoBehaviour
     float current_inv_time = 0f;
     public Image[] live_graphics;
 
+    // Fixing Variables
+    string current_power = "";
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -37,14 +40,21 @@ public class ScrPlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Damage")
+        if (other.gameObject.tag == "Damage" && !other.gameObject.GetComponent<ScrHazard>().IsSafe())
         {
-            Debug.Log("Ow");
             if (current_inv_time == 0)
             {
                 lives -= 1;
                 current_inv_time = max_inv_time;
                 UpdateLives();
+            }
+        }
+        if (other.gameObject.tag == "Buff")
+        {
+            if (other.gameObject.name == "ElectricBuff(Clone)")
+            {
+                current_power = "wires";
+                Destroy(other.gameObject);
             }
         }
     }
@@ -154,6 +164,15 @@ public class ScrPlayerController : MonoBehaviour
     {
         playerRB = GetComponent<Rigidbody>();
         attackbox.SetActive(false);
+    }
+
+    public bool CanFix(string type)
+    {
+        if (current_power == type)
+        {
+            return true;
+        }
+        return false;
     }
 
     // Update is called once per frame

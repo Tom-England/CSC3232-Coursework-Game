@@ -5,6 +5,8 @@ using UnityEngine.AI;
 using System;
 public class ScrEnemyController : MonoBehaviour
 {
+
+    ScrHelperFunctions helper = new ScrHelperFunctions();
     [SerializeField]
     float drop_chance = 0.5f;
     public GameObject[] drops;
@@ -21,11 +23,24 @@ public class ScrEnemyController : MonoBehaviour
 
     [SerializeField]
     Transform destination;
+    Transform backup_destination;
     NavMeshAgent nav_mesh_agent;
+
+    [SerializeField]
+    GameObject throwable;
+    bool has_item = true;
+
+    [SerializeField]
+    string ID;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        // Creates an ID for the enemy, used for tracking thrown items
+        Guid guid = Guid.NewGuid();
+        ID = guid.ToString();
+
         nav_mesh_agent = this.GetComponent<NavMeshAgent>();
         lives = max_lives;
         if (nav_mesh_agent == null)
@@ -47,27 +62,28 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
-    float CalculateDistance(Vector3 a, Vector3 b)
-    {
-        double d = Math.Sqrt(Math.Pow(b.x - a.x, 2) + Math.Pow(b.y - a.y, 2) + Math.Pow(b.z - a.z, 2));
-        return (float)d;
-    }
-
     void Attack()
     {
         Debug.Log("Attacking");
         attack_delay = max_attack_delay;
+        has_item = false;
+        GameObject thrown;
+        thrown = Instantiate(throwable, transform.position + transform.forward + Vector3.up, Quaternion.identity);
+        thrown.name = ID;
+        backup_destination = destination;
+        destination = thrown.transform;
     }
 
     void StateMachine()
     {
         // Expected order:
+        // 0. Pick up item if thrown
         // 1. Move close to player
         // 2. Once in range, attempt to attack
         // 3. Wait until attack delay is over or player moved away
         // 4. Repeat from step 2 or 1.
 
-        if (CalculateDistance(transform.position, destination.transform.position) < attack_range)
+        if (helper.CalculateDistance(transform.position, destination.transform.position) < attack_range && has_item)
         {
             // Player is within range, check attack
             nav_mesh_agent.isStopped = true;
@@ -115,6 +131,16 @@ public class ScrEnemyController : MonoBehaviour
             {
                 Die();
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.name == ID)
+        {
+            has_item = true;
+            Destroy(col.gameObject);
+            destination = backup_destination;
         }
     }
 

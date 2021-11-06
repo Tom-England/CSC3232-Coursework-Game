@@ -4764,7 +4764,6 @@ GameObject:
   - component: {fileID: 1337861815151883137}
   - component: {fileID: 1337861815151883138}
   - component: {fileID: 1337861815151883139}
-  - component: {fileID: 1337861815151883136}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -4833,19 +4832,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &1337861815151883136
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337861815151883142}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1337861815402007614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4855,9 +4841,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1337861815402007609}
+  - component: {fileID: 3162761543400606359}
   m_Layer: 0
   m_Name: ElectricBuff
-  m_TagString: Untagged
+  m_TagString: Buff
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4878,3 +4865,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3162761543400606359
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337861815402007614}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
