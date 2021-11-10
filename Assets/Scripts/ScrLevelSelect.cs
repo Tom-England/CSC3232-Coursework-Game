@@ -55,7 +55,7 @@ public class ScrLevelSelect : MonoBehaviour
     void Update()
     {
 
-        if (can_interact && Input.GetButtonDown("Fire1"))
+        if (can_interact && Input.GetButtonDown("Submit"))
         {
             Debug.Log("Open Level Select");
             canvas.enabled = true;
