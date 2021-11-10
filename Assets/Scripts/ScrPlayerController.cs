@@ -6,7 +6,8 @@ using System;
 public class ScrPlayerController : MonoBehaviour
 {
 
-    public float speed = 3f;
+    public float max_speed = 10f;
+    public float speed = 500f;
     public float jump_force = 100f;
     bool in_air = false;
     bool in_air_bob = false;
@@ -18,6 +19,7 @@ public class ScrPlayerController : MonoBehaviour
     bool attack_flag = false;
     float max_attack_time_on = 1f;
     float attack_time_on = 0f;
+    public GameObject tr;
 
     // Player Lives Variables
     static int max_lives = 3;
@@ -26,9 +28,15 @@ public class ScrPlayerController : MonoBehaviour
     float current_inv_time = 0f;
     public Image[] live_graphics;
 
-    // Fixing Variables
+    // Fixing Hazards Variables
     string current_power = "";
 
+
+    /// <summary> method OnCollisionEnter
+    /// Handles interactions when the player enters a collision. 
+    /// Only used to detect if the player is on the floor plane
+    /// so that the bobbing animation and jumping function correctly.
+    /// </summary>
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -38,27 +46,54 @@ public class ScrPlayerController : MonoBehaviour
         }
     }
 
+    /// <summary> method OnTriggerEnter
+    /// Handles interactions when the player enters a trigger zone. 
+    /// Current interactions:
+    ///     * Player has been hit
+    ///     * Player has recieved a powerup/buff
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Damage" && !other.gameObject.GetComponent<ScrHazard>().IsSafe())
+        ScrHazard hazardScr;
+        //if (other.gameObject.name.Contains("Hazard"))
+        //{
+        hazardScr = other.gameObject.GetComponent<ScrHazard>();
+        //}
+        if (other.gameObject.tag == "Damage")
         {
-            if (current_inv_time == 0)
+            if (hazardScr == null || !hazardScr.IsSafe())
             {
-                lives -= 1;
-                current_inv_time = max_inv_time;
-                UpdateLives();
+                if (current_inv_time == 0)
+                {
+                    lives -= 1;
+                    current_inv_time = max_inv_time;
+                    UpdateLives();
+                }
             }
         }
         if (other.gameObject.tag == "Buff")
         {
             if (other.gameObject.name == "ElectricBuff(Clone)")
             {
-                current_power = "wires";
-                Destroy(other.gameObject);
+
+            }
+            switch (other.gameObject.name)
+            {
+                case "ElectricBuff(Clone)":
+                    current_power = "wires";
+                    Destroy(other.gameObject);
+                    break;
+                case "CementBuff(Clone)":
+                    current_power = "cement";
+                    Destroy(other.gameObject);
+                    break;
             }
         }
     }
 
+    /// <summary> method UpdateLives
+    /// Updates the life indicator in the UI
+    /// </summary>
     void UpdateLives()
     {
         if (lives <= 0)
@@ -79,12 +114,19 @@ public class ScrPlayerController : MonoBehaviour
         }
     }
 
+    public int GetLives()
+    {
+        return lives;
+    }
+
     Vector3 GetPos()
     {
         return playerRB.transform.position;
     }
 
-    // Takes in the x and y values from player input and rotates the player to face in the direction of movement
+    /// <summary> method RotatePlayer
+    /// Takes in the x and y values from player input and rotates the player to face in the direction of movement.
+    /// </summary>
     void RotatePlayer(float x, float y)
     {
         Vector3 direction = new Vector3(x, 0, y);
@@ -94,43 +136,57 @@ public class ScrPlayerController : MonoBehaviour
         transform.localRotation = headingChange;
     }
 
-    // Handles player movement each frame, returns true if the player moved and false if they did not.
+    /// <summary> method HandleMovement
+    /// Handles player movement each frame.
+    /// <returns> Boolean value, true if movement occured, false if not.</returns>
+    /// </summary>
     bool HandleMovement()
     {
-        float y_axis = Input.GetAxis("Vertical");
-        float x_axis = Input.GetAxis("Horizontal");
-        bool jump_flag = Input.GetButtonDown("Jump");
-        if (in_air) { jump_flag = false; }
-        if (y_axis == 0 && x_axis == 0 && !jump_flag)
+        float current_speed = playerRB.velocity.magnitude;
+        Debug.Log(current_speed);
+        if (current_speed < max_speed)
         {
-            // No Movement
-            return false;
-        }
-        else
-        {
-            // Handle Jump
-            if (jump_flag)
+            float y_axis = Input.GetAxis("Vertical");
+            float x_axis = Input.GetAxis("Horizontal");
+            bool jump_flag = Input.GetButtonDown("Jump");
+            if (in_air) { jump_flag = false; }
+            if (y_axis == 0 && x_axis == 0 && !jump_flag)
             {
-                playerRB.AddForce(Vector3.up * jump_force, ForceMode.Force);
-                in_air = true;
+                // No Movement
+                return false;
             }
             else
             {
-                // Movement
-                playerRB.AddForce(Vector3.forward * y_axis * speed, ForceMode.Force);
-                playerRB.AddForce(Vector3.right * x_axis * speed, ForceMode.Force);
-                RotatePlayer(x_axis, y_axis);
-                // Bobbing animation
-                if (!in_air_bob)
+                // Handle Jump
+                if (jump_flag)
                 {
-                    playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
-                    in_air_bob = !in_air_bob;
-                };
+                    playerRB.AddForce(Vector3.up * jump_force, ForceMode.Force);
+                    in_air = true;
+                }
+                else
+                {
+                    // Movement
+                    playerRB.AddForce(Vector3.forward * y_axis * speed * Time.deltaTime, ForceMode.Force);
+                    playerRB.AddForce(Vector3.right * x_axis * speed * Time.deltaTime, ForceMode.Force);
+                    RotatePlayer(x_axis, y_axis);
+                    // Bobbing animation
+                    if (!in_air_bob)
+                    {
+                        playerRB.AddForce(Vector3.up * 100, ForceMode.Force);
+                        in_air_bob = !in_air_bob;
+                    };
+                }
+                return true;
             }
-            return true;
         }
+        return false;
+
     }
 
+    /// <summary> method HandleAttack
+    /// Handles player attack by enabling the attackbox collider and setting the timer for keeping it on.
+    /// <returns> Boolean value, true if attack occured, false if not.</returns>
+    /// </summary>
     bool HandleAttack()
     {
         attack_flag = Input.GetButtonDown("Fire1");
@@ -138,6 +194,8 @@ public class ScrPlayerController : MonoBehaviour
         {
             attackbox.SetActive(true);
             attack_time_on = max_attack_time_on;
+            Vector3 new_pos = new Vector3(tr.transform.position.x, tr.transform.position.y, -1);
+            tr.transform.position = new_pos;
             //Debug.Log("pow");
 
         }
@@ -166,6 +224,10 @@ public class ScrPlayerController : MonoBehaviour
         attackbox.SetActive(false);
     }
 
+    /// <summary> method CanFix
+    /// Public function for checking if the player can fix a provided hazard type.
+    /// <returns> Boolean value, true if player can fix provided hazard, false if not.</returns>
+    /// </summary>
     public bool CanFix(string type)
     {
         if (current_power == type)
@@ -173,6 +235,15 @@ public class ScrPlayerController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public string GetBuff()
+    {
+        return current_power;
+    }
+    public void RemoveBuff()
+    {
+        current_power = "";
     }
 
     // Update is called once per frame

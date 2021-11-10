@@ -8,7 +8,10 @@ public class ScrDamageZone : MonoBehaviour
     public BoxCollider col;
     public bool showInspectorBox = true;
 
-    // Fills the box collider in with red in the inspector.
+    /// <summary> method OnDrawGizmos
+    /// This is helper code that draws a box in the Unity inspector to highlight the area the damagezone exists in.
+    /// Not visible in game.
+    /// </summary>
     void OnDrawGizmos()
     {
         if (showInspectorBox)

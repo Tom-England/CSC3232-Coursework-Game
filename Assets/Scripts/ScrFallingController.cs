@@ -15,7 +15,10 @@ public class ScrFallingController : MonoBehaviour
     public GameObject[] hazards;
     System.Random rnd = new System.Random();
 
-    // Update is called once per frame
+    /// <summary> method Update
+    /// Attempts to generate a new falling object hazard within the provided range.
+    /// New object is set to destroy itself after 10 seconds of existing to reduce clutter
+    /// </summary>
     void Update()
     {
         if (elapsed_time > spawn_timer)
@@ -52,7 +55,10 @@ public class ScrFallingController : MonoBehaviour
 
     public bool showInspectorBox = true;
 
-    // Fills the box collider in with red in the inspector.
+    /// <summary> method OnDrawGizmos
+    /// This is helper code that draws a box in the Unity inspector to highlight the area the falling zone exists in.
+    /// Not visible in game.
+    /// </summary>
     void OnDrawGizmos()
     {
         if (showInspectorBox)

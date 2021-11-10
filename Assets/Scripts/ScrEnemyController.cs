@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using TMPro;
 public class ScrEnemyController : MonoBehaviour
 {
+
+    // Variables for speaking system
+    public TMP_Text text;
+    public string[] messages;
+    float speech_cooldown;
 
     ScrHelperFunctions helper = new ScrHelperFunctions();
     [SerializeField]
@@ -34,9 +40,14 @@ public class ScrEnemyController : MonoBehaviour
     string ID;
 
 
-    // Start is called before the first frame update
+    /// <summary> method Start
+    /// Start method is used to generate a new ID for the enemy as well as setting up the navmesh and giving life to enemy.
+    /// </summary>
     void Start()
     {
+
+        destination = GameObject.Find("Player").transform;
+
         // Creates an ID for the enemy, used for tracking thrown items
         Guid guid = Guid.NewGuid();
         ID = guid.ToString();
@@ -53,6 +64,9 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary> method SetDestination
+    /// Method verifies that the destination is set to a transform before beginning the navmesh pathfinding.
+    /// </summary>
     private void SetDestination()
     {
         if (destination != null)
@@ -62,9 +76,11 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary> method Attack
+    /// Generates the enemys throwable and modifies their destination so they go and pick it up.
+    /// </summary>
     void Attack()
     {
-        Debug.Log("Attacking");
         attack_delay = max_attack_delay;
         has_item = false;
         GameObject thrown;
@@ -74,6 +90,9 @@ public class ScrEnemyController : MonoBehaviour
         destination = thrown.transform;
     }
 
+    /// <summary> method StateMachine
+    /// Controls the state of the enemy based off their location relative to the player and the current state of their attack.
+    /// </summary>
     void StateMachine()
     {
         // Expected order:
@@ -101,6 +120,10 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary> method GenerateDrop
+    /// Controls if a powerup is created on the enemys death.
+    /// <returns>Boolean value, true if a drop is created and false otherwise</returns>
+    /// </summary>
     bool GenerateDrop()
     {
         bool drop_created = false;
@@ -109,11 +132,14 @@ public class ScrEnemyController : MonoBehaviour
         {
             drop_created = true;
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-            Instantiate(drops[UnityEngine.Random.Range(0, drops.Length - 1)], pos, Quaternion.identity);
+            Instantiate(drops[UnityEngine.Random.Range(0, drops.Length)], pos, Quaternion.identity);
         }
         return drop_created;
     }
 
+    /// <summary> method Die
+    /// Destroys the object and calls Generate Drop
+    /// </summary>
     void Die()
     {
         // Controls destroying the enemy object and generating the drop
@@ -121,11 +147,17 @@ public class ScrEnemyController : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /// <summary> method OnTriggerEnter
+    /// Handles interaction when the enemy enters a trigger zone.
+    /// Current interactions:
+    ///     * Enemy has been hit
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Ow");
         if (other.gameObject.tag == "Attack")
         {
-            Debug.Log(gameObject.name + "Hit");
+            Speak();
             lives -= 1;
             if (lives <= 0)
             {
@@ -134,24 +166,72 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary> method Speak
+    /// Displays a message from the messages array and sets its cooldown
+    /// </summary>
+    void Speak()
+    {
+        text.text = messages[UnityEngine.Random.Range(0, messages.Length)];
+        speech_cooldown = 1;
+    }
+
+    /// <summary> method OnCollisionEnter
+    /// Handles interaction when the enemy enters a collision.
+    /// Current interactions:
+    ///     * Enemy is attempting to pickup its thrown item
+    /// </summary>
     private void OnCollisionEnter(Collision col)
     {
+        // This function does work however it only works if unity can be bothered to call it
+        // For some strange reason checking if two boxes overlap consistently was too hard for unitys
+        // developers so the enemy regularly fails to pick up their object because this is not called
+        Debug.Log("Attempting Pickup");
         if (col.gameObject.name == ID)
         {
+            Debug.Log("Success");
             has_item = true;
             Destroy(col.gameObject);
             destination = backup_destination;
         }
     }
 
-    // Update is called once per frame
+    /// <summary> method IfNearThrown
+    // This function is the backup for when OnCollisionEnter does not run despite the collision occuring.
+    // This shouldn't be needed but unfortunatly it is.
+    /// </summary>
+    void IfNearThrown()
+    {
+        if (!has_item)
+        {
+            if (helper.CalculateDistance(transform.position, destination.position) <= 1 && attack_delay < max_attack_delay / 2)
+            {
+                has_item = true;
+                Destroy(destination.gameObject);
+                destination = backup_destination;
+            }
+        }
+    }
+
+    /// <summary> method Update
+    /// In charge of calling the state machine and checking if the enemy is near their thrown object
+    /// Also updates the various cooldowns for states.
+    /// </summary>
     void Update()
     {
         StateMachine();
+        IfNearThrown();
         if (attack_delay > 0)
         {
             attack_delay -= Time.deltaTime;
             if (attack_delay < 0) { attack_delay = 0; }
+        }
+        if (speech_cooldown > 0)
+        {
+            speech_cooldown -= Time.deltaTime;
+        }
+        else if (text.text != "")
+        {
+            text.text = "";
         }
     }
 }

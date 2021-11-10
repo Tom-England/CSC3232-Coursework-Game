@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class ScrObject : MonoBehaviour
 {
-    Vector3 CalculateDirection(Vector3 other)
-    {
-        Vector3 dir = other - transform.position;
-        Vector3 norm_dir = dir.normalized;
-        return norm_dir;
-    }
+    ScrHelperFunctions helper = new ScrHelperFunctions();
+    /// <summary> method OnTriggerEnter
+    /// Detects if the object has been hit and applys a force in the direction away from the player to its rigid body.
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Attack")
         {
-            Vector3 dir = CalculateDirection(other.transform.position);
+            Vector3 dir = helper.CalculateDirection(transform.position, other.transform.position);
             GetComponent<Rigidbody>().AddForce(dir * -500, ForceMode.Force);
         }
     }
