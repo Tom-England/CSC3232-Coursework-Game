@@ -10,7 +10,7 @@ public class ScrGameController : MonoBehaviour
     public bool game_finished = false;
 
     public Transform hazard_master;
-    public List<Transform> hazards = new List<Transform>();
+    public List<Transform> hazards;
     public static int hazards_safe;
     public static int hazards_total;
 
@@ -65,6 +65,10 @@ public class ScrGameController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        hazards = new List<Transform>();
+        hazards_total = 0;
+        hazards_safe = 0;
+        game_time = 0f;
         game_running = true;
         foreach (Transform child in hazard_master)
         {
