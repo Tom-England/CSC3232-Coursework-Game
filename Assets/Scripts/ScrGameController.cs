@@ -23,7 +23,8 @@ public class ScrGameController : MonoBehaviour
 
     /// <summary> method PauseGame
     /// Modifies the timescale to 0 to disable all physics and time based interactions
-    /// Effectivly pausing the game.
+    /// Effectivly pausing the game as movement can only occur between two points in time
+    /// and by setting the time scale to 0, the next moment will never occur.
     /// Also sets the paused text to display
     /// </summary>
     void PauseGame()

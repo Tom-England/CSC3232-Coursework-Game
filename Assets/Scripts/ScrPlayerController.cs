@@ -138,6 +138,9 @@ public class ScrPlayerController : MonoBehaviour
 
     /// <summary> method HandleMovement
     /// Handles player movement each frame.
+    /// The current speed of the player is obtained from its rigidbody and compared
+    /// to the specified maximum speed to prevent the player obtaining unlimited speed
+    /// from the force being constantly applied.
     /// <returns> Boolean value, true if movement occured, false if not.</returns>
     /// </summary>
     bool HandleMovement()
@@ -185,6 +188,8 @@ public class ScrPlayerController : MonoBehaviour
 
     /// <summary> method HandleAttack
     /// Handles player attack by enabling the attackbox collider and setting the timer for keeping it on.
+    /// The attackbox has a habit of not being detected every time (See comments on ScrEnemyController.OnCollisionEnter for more)
+    /// To remedy this, the attack box has a fairly long cooldown so there is time for the detection however this can make it feel unresponsive
     /// <returns> Boolean value, true if attack occured, false if not.</returns>
     /// </summary>
     bool HandleAttack()

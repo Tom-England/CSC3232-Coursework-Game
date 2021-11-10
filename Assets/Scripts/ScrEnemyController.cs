@@ -122,6 +122,10 @@ public class ScrEnemyController : MonoBehaviour
 
     /// <summary> method GenerateDrop
     /// Controls if a powerup is created on the enemys death.
+    /// Powerup type is also random (although there are only 2 for now)
+    /// This introduces a degree of randomness into the game and prevents the player
+    /// From blasting through the game too easily as surviving long enough to get the correct
+    /// powerup can be fairly difficult
     /// <returns>Boolean value, true if a drop is created and false otherwise</returns>
     /// </summary>
     bool GenerateDrop()
