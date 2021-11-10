@@ -123,7 +123,7 @@ public class ScrGameController : MonoBehaviour
         game_finished = CheckFinished();
         if (game_finished)
         {
-            SceneManager.LoadScene("Overworld");
+            SceneManager.LoadScene("VictoryScreen");
         }
         UpdateUI();
     }
