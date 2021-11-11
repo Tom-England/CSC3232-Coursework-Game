@@ -330,7 +330,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '> Level 1'
+  m_Text: '> Level 1 (Normal)'
 --- !u!222 &166466205
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6645,7 +6645,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '> Level 2'
+  m_Text: '> Level 2 (Ice)'
 --- !u!222 &1562509597
 CanvasRenderer:
   m_ObjectHideFlags: 0
