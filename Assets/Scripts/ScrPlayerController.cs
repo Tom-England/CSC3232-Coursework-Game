@@ -54,11 +54,15 @@ public class ScrPlayerController : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        ScrHazard hazardScr;
+        ScrHazard hazardScr = null;
         //if (other.gameObject.name.Contains("Hazard"))
         //{
-        hazardScr = other.gameObject.GetComponent<ScrHazard>();
-        Debug.Log(other.gameObject.name + ": " + hazardScr);
+        if (other.gameObject.name.Contains("DamageZone"))
+        {
+            hazardScr = other.gameObject.transform.parent.GetComponent<ScrHazard>();
+            Debug.Log(other.gameObject.name + ": " + hazardScr);
+        }
+
         //}
         if (other.gameObject.tag == "Damage")
         {
