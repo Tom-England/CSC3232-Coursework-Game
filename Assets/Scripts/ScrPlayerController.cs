@@ -58,6 +58,7 @@ public class ScrPlayerController : MonoBehaviour
         //if (other.gameObject.name.Contains("Hazard"))
         //{
         hazardScr = other.gameObject.GetComponent<ScrHazard>();
+        Debug.Log(other.gameObject.name + ": " + hazardScr);
         //}
         if (other.gameObject.tag == "Damage")
         {
@@ -96,10 +97,6 @@ public class ScrPlayerController : MonoBehaviour
     /// </summary>
     void UpdateLives()
     {
-        if (lives <= 0)
-        {
-            Debug.Log("Dead");
-        }
         for (int i = 0; i < max_lives; i++)
         {
             if (i < lives)
@@ -146,7 +143,6 @@ public class ScrPlayerController : MonoBehaviour
     bool HandleMovement()
     {
         float current_speed = playerRB.velocity.magnitude;
-        Debug.Log(current_speed);
         if (current_speed < max_speed)
         {
             float y_axis = Input.GetAxis("Vertical");

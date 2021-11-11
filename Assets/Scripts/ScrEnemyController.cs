@@ -147,7 +147,7 @@ public class ScrEnemyController : MonoBehaviour
     void Die()
     {
         // Controls destroying the enemy object and generating the drop
-        Debug.Log(GenerateDrop());
+        GenerateDrop();
         Destroy(gameObject);
     }
 
@@ -158,7 +158,6 @@ public class ScrEnemyController : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Ow");
         if (other.gameObject.tag == "Attack")
         {
             Speak();
@@ -189,10 +188,10 @@ public class ScrEnemyController : MonoBehaviour
         // This function does work however it only works if unity can be bothered to call it
         // For some strange reason checking if two boxes overlap consistently was too hard for unitys
         // developers so the enemy regularly fails to pick up their object because this is not called
-        Debug.Log("Attempting Pickup");
+        //Debug.Log("Attempting Pickup");
         if (col.gameObject.name == ID)
         {
-            Debug.Log("Success");
+            //Debug.Log("Success");
             has_item = true;
             Destroy(col.gameObject);
             destination = backup_destination;

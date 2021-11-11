@@ -109,7 +109,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8742065504885497532}
   - component: {fileID: 6257790062796556461}
-  - component: {fileID: 4808845561045964250}
   - component: {fileID: 2486970967619992118}
   m_Layer: 0
   m_Name: Text
@@ -152,6 +151,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -176,14 +176,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!222 &4808845561045964250
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8650844440903254833}
-  m_CullTransparentMesh: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2486970967619992118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +192,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -272,6 +266,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6257790062796556461}
   m_maskType: 0
+  _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
 --- !u!1001 &7254097638298385226
