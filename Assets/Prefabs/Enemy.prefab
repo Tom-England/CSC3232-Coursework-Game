@@ -75,7 +75,7 @@ MonoBehaviour:
   - Hey!
   - Stop hitting me!
   - That hurt!
-  drop_chance: 1
+  drop_chance: 0.8
   drops:
   - {fileID: 1337861815402007614, guid: 64c8ace2165cf6346b95eabaaa071ec9, type: 3}
   - {fileID: 180422008645713975, guid: 1aa59455ad9c08c43b2074c16dd382ab, type: 3}
