@@ -6,6 +6,10 @@ using System;
 public class ScrPlayerController : MonoBehaviour
 {
 
+    public ScrSoundController sound;
+    public AudioClip attack_sound;
+    public AudioClip hit_sound;
+
     public float max_speed = 10f;
     public float speed = 500f;
     public float jump_force = 100f;
@@ -70,6 +74,7 @@ public class ScrPlayerController : MonoBehaviour
             {
                 if (current_inv_time == 0)
                 {
+                    sound.PlayAt(hit_sound, transform.position);
                     lives -= 1;
                     current_inv_time = max_inv_time;
                     UpdateLives();
@@ -197,6 +202,7 @@ public class ScrPlayerController : MonoBehaviour
         attack_flag = Input.GetButtonDown("Fire1");
         if (attack_flag)
         {
+            sound.PlayAt(attack_sound, transform.position);
             attackbox.SetActive(true);
             attack_time_on = max_attack_time_on;
             Vector3 new_pos = new Vector3(tr.transform.position.x, tr.transform.position.y, -1);
