@@ -7,6 +7,10 @@ using TMPro;
 public class ScrEnemyController : MonoBehaviour
 {
 
+    // GOAP
+    public string[] wants;
+    public string[] needs;
+
     // Variables for speaking system
     public TMP_Text text;
     public string[] messages;
@@ -24,21 +28,25 @@ public class ScrEnemyController : MonoBehaviour
     [SerializeField]
     float attack_range;
 
-    float max_attack_delay = 3f;
-    float attack_delay = 0;
+    public float max_attack_delay = 3f;
+    public float attack_delay = 0;
 
     [SerializeField]
-    Transform destination;
-    Transform backup_destination;
+    public Transform destination;
+    public Transform backup_destination;
     NavMeshAgent nav_mesh_agent;
 
     [SerializeField]
-    GameObject throwable;
-    bool has_item = true;
+    public GameObject throwable;
+    public bool has_item = true;
 
     [SerializeField]
     string ID;
 
+    public string GetID()
+    {
+        return ID;
+    }
 
     /// <summary> method Start
     /// Start method is used to generate a new ID for the enemy as well as setting up the navmesh and giving life to enemy.
@@ -76,10 +84,18 @@ public class ScrEnemyController : MonoBehaviour
         }
     }
 
+    /// <summary> method SetHasItem
+    /// Setter for has_item
+    /// </summary>
+    public void SetHasItem(bool b)
+    {
+        has_item = b;
+    }
+
     /// <summary> method Attack
     /// Generates the enemys throwable and modifies their destination so they go and pick it up.
     /// </summary>
-    void Attack()
+    public void Attack()
     {
         attack_delay = max_attack_delay;
         has_item = false;
@@ -105,7 +121,7 @@ public class ScrEnemyController : MonoBehaviour
         if (helper.CalculateDistance(transform.position, destination.transform.position) < attack_range && has_item)
         {
             // Player is within range, check attack
-            nav_mesh_agent.isStopped = true;
+
             if (attack_delay <= 0)
             {
                 // Attack is ready
@@ -115,10 +131,32 @@ public class ScrEnemyController : MonoBehaviour
         else
         {
             // Player is out of range, move
-            nav_mesh_agent.isStopped = false;
-            SetDestination();
+            Move();
         }
     }
+
+    public void Move()
+    {
+        nav_mesh_agent.isStopped = false;
+        SetDestination();
+    }
+    public void Stop()
+    {
+        nav_mesh_agent.isStopped = true;
+    }
+
+    public float GetRange()
+    {
+        return attack_range;
+    }
+
+    // GOAP
+    // Actions:
+    //  Move  -  no requirements
+    //  Change Target  -  has item or not
+    //  Attack  -  needs item
+    //  Retreat  -  too close & target is player
+    //  Pickup item  -  target is item and near item
 
     /// <summary> method GenerateDrop
     /// Controls if a powerup is created on the enemys death.

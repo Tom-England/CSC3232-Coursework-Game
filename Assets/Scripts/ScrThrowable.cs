@@ -21,6 +21,11 @@ public class ScrThrowable : MonoBehaviour
         }
     }
 
+    public void Pickup()
+    {
+        Destroy(transform.gameObject);
+    }
+
     /// <summary> method Start
     /// Locates the player in the scene then applys a force towards them.
     /// This was done by the enemy when creating the object but this failed
