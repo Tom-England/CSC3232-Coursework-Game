@@ -35,6 +35,10 @@ class GoapAgent : MonoBehaviour
         return valid;
     }
 
+    /// <summary> method FindHelpfulActivities
+    /// Generates the valid activites that can lead to a goal activity
+    /// <returns>List of valid activities</returns>
+    /// </summary>
     List<GoapActivity> FindHelpfulActivities(List<KeyValuePair<string, bool>> has, GoapActivity target)
     {
         List<GoapActivity> valid = new List<GoapActivity>();
@@ -49,6 +53,10 @@ class GoapAgent : MonoBehaviour
         return valid;
     }
 
+    /// <summary> method SelectBest
+    /// Selects the activity with the lowest weight from a list of activites
+    /// <returns>best activity</returns>
+    /// </summary>
     public GoapActivity SelectBest(List<GoapActivity> activities)
     {
         GoapActivity best = activities[0];
@@ -77,6 +85,10 @@ class GoapAgent : MonoBehaviour
         }
     }
 
+    /// <summary> method UpdateHas
+    /// Creates a new list of has tags by taking the old list and applying changes
+    /// <returns>Updated list of has tags</returns>
+    /// </summary>
     List<KeyValuePair<string, bool>> UpdateHas(List<KeyValuePair<string, bool>> has, List<KeyValuePair<string, bool>> changes)
     {
         List<KeyValuePair<string, bool>> new_has = new List<KeyValuePair<string, bool>>();
@@ -98,6 +110,10 @@ class GoapAgent : MonoBehaviour
         return new_has;
     }
 
+    /// <summary> method CalculatePathToGoal
+    /// Calculates a path to the current goal status
+    /// <returns>Path of activities that result in the goal condition</returns>
+    /// </summary>
     public List<GoapActivity> CalculatePathToGoal()
     {
         List<GoapActivity> path = new List<GoapActivity>();
@@ -117,8 +133,8 @@ class GoapAgent : MonoBehaviour
                 valid.Add(activity);
             }
         }
-        Debug.Log("Valid End Goals");
-        OutputList(valid);
+        //Debug.Log("Valid End Goals");
+        //OutputList(valid);
         // Step 2
         GoapActivity best = SelectBest(valid);
         path.Add(best);
@@ -136,10 +152,10 @@ class GoapAgent : MonoBehaviour
             // Step 4
             List<KeyValuePair<string, bool>> requirements = path[pointer].GetRequirements();
             valid = FindHelpfulActivities(fake_has, path[pointer]);
-            Debug.Log("Valid steps");
-            OutputList(valid);
+            //Debug.Log("Valid steps");
+            //OutputList(valid);
             best = SelectBest(valid);
-            Debug.Log("Adding: " + best);
+            //Debug.Log("Adding: " + best);
             path.Add(best);
             if (best.CanDo(has))
             {
@@ -154,10 +170,11 @@ class GoapAgent : MonoBehaviour
 
     void Start()
     {
+        // Sets up has with values for attacking the player
         has.Add(new KeyValuePair<string, bool>("hasItem", true));
         has.Add(new KeyValuePair<string, bool>("nearTarget", false));
         has.Add(new KeyValuePair<string, bool>("playerTarget", true));
-        goal = new KeyValuePair<string, bool>("playerTarget", false);
+        goal = new KeyValuePair<string, bool>("hasItem", false);
         path = CalculatePathToGoal();
         Debug.Log("Starting Path Output");
         for (int i = path.Count - 1; i >= 0; i--)
