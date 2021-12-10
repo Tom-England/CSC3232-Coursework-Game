@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7254097638843796425}
   - component: {fileID: 7254097638843796426}
   - component: {fileID: 7254097638843796423}
+  - component: {fileID: 135927631157508413}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -69,6 +70,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dad6fac573aabc4897022729904770e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wants: []
+  needs: []
   text: {fileID: 2486970967619992118}
   messages:
   - Ow!
@@ -82,9 +85,13 @@ MonoBehaviour:
   max_lives: 2
   lives: 0
   attack_range: 6
+  max_attack_delay: 3
+  attack_delay: 0
   destination: {fileID: 0}
+  backup_destination: {fileID: 0}
   throwable: {fileID: 5612625206605791738, guid: 62d8c4e96e725e7468a5127e2f8a83f3,
     type: 3}
+  has_item: 1
   ID: 
 --- !u!65 &7254097638843796423
 BoxCollider:
@@ -99,6 +106,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8483124, y: 1.1835063, z: 0.93932533}
   m_Center: {x: -0.005056381, y: 0.5961174, z: 0}
+--- !u!114 &135927631157508413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7254097638843796427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c594d5f87088249bb51075008603d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8650844440903254833
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class Move : GoapActivity
     ScrHelperFunctions helper = new ScrHelperFunctions();
     public Move()
     {
-        AddEffect("nearTarget", true);
+        NoRequirements();
         SetWeight(0);
     }
 

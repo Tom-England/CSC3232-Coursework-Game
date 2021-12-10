@@ -8,12 +8,14 @@ class GoapAgent : MonoBehaviour
     public List<GoapActivity> activities = new List<GoapActivity>();
     public List<GoapActivity> path = new List<GoapActivity>();
 
+    int current_task_index = 0;
+
     public GoapAgent()
     {
         has = new List<KeyValuePair<string, bool>>();
         activities.Add(new Attack());
         activities.Add(new Pickup());
-        activities.Add(new Move());
+        //activities.Add(new Move());
         activities.Add(new TargetPlayer());
         activities.Add(new TargetThrown());
     }
@@ -44,6 +46,7 @@ class GoapAgent : MonoBehaviour
         List<GoapActivity> valid = new List<GoapActivity>();
         foreach (GoapActivity activity in activities)
         {
+            //Debug.Log("Trying:" + activity);
             List<KeyValuePair<string, bool>> requirements = UpdateHas(has, activity.GetEffects());
             if (requirements != has && target.CanDo(requirements))
             {
@@ -74,7 +77,7 @@ class GoapAgent : MonoBehaviour
     {
         foreach (GoapActivity item in list)
         {
-            Debug.Log(item);
+            //Debug.Log(item);
         }
     }
     void OutputList(List<KeyValuePair<string, bool>> list)
@@ -83,6 +86,11 @@ class GoapAgent : MonoBehaviour
         {
             Debug.Log(list[i]);
         }
+    }
+
+    void OutputState(List<KeyValuePair<string, bool>> h)
+    {
+        Debug.Log("State: " + h[0] + h[1]);
     }
 
     /// <summary> method UpdateHas
@@ -110,6 +118,24 @@ class GoapAgent : MonoBehaviour
         return new_has;
     }
 
+    GoapActivity FindTargetActivity(KeyValuePair<string, bool> target)
+    {
+        GoapActivity temp = activities[0];
+        bool found = false;
+        foreach (GoapActivity activity in activities)
+        {
+            if (activity.GetEffects().Contains(target))
+            {
+                if (activity.GetWeight() < temp.GetWeight() || found == false)
+                {
+                    temp = activity;
+                    found = true;
+                }
+            }
+        }
+        return temp;
+    }
+
     /// <summary> method CalculatePathToGoal
     /// Calculates a path to the current goal status
     /// <returns>Path of activities that result in the goal condition</returns>
@@ -126,17 +152,9 @@ class GoapAgent : MonoBehaviour
         List<KeyValuePair<string, bool>> fake_has = has;
         // Step 1
         List<GoapActivity> valid = new List<GoapActivity>();
-        foreach (GoapActivity activity in activities)
-        {
-            if (activity.GetEffects().Contains(goal))
-            {
-                valid.Add(activity);
-            }
-        }
-        //Debug.Log("Valid End Goals");
-        //OutputList(valid);
+        GoapActivity best = FindTargetActivity(goal);
+        Debug.Log("Valid End Goal: " + best);
         // Step 2
-        GoapActivity best = SelectBest(valid);
         path.Add(best);
 
         // Step 3
@@ -164,23 +182,59 @@ class GoapAgent : MonoBehaviour
             pointer += 1;
 
         }
+        path.Reverse();
         return path;
 
     }
 
+    void RunAgent()
+    {
+        if (path[current_task_index].Finished())
+        {
+            Debug.Log("Finished Doing: " + path[current_task_index]);
+            path[current_task_index].Reset();
+            has = UpdateHas(has, path[current_task_index].GetEffects());
+            current_task_index += 1;
+
+            if (current_task_index == path.Count)
+            {
+                // Final task is complete
+                current_task_index = 0;
+                goal = new KeyValuePair<string, bool>(goal.Key, !goal.Value);
+                OutputState(has);
+                Debug.Log("New Goal:" + goal);
+                path = CalculatePathToGoal();
+                Debug.Log("New Path of length: " + path.Count);
+                for (int i = 0; i < path.Count; i++)
+                {
+                    Debug.Log(path[i]);
+                }
+            }
+            else { Debug.Log("Starting doing: " + path[current_task_index]); }
+        }
+        else
+        {
+            path[current_task_index].DoActivity(transform.gameObject);
+        }
+    }
+
     void Start()
     {
+        OutputList(activities[2].GetRequirements());
         // Sets up has with values for attacking the player
         has.Add(new KeyValuePair<string, bool>("hasItem", true));
-        has.Add(new KeyValuePair<string, bool>("nearTarget", false));
         has.Add(new KeyValuePair<string, bool>("playerTarget", true));
         goal = new KeyValuePair<string, bool>("hasItem", false);
         path = CalculatePathToGoal();
         Debug.Log("Starting Path Output");
-        for (int i = path.Count - 1; i >= 0; i--)
+        for (int i = 0; i < path.Count; i++)
         {
             Debug.Log(path[i]);
         }
         Debug.Log("Ending path output");
+    }
+    void Update()
+    {
+        RunAgent();
     }
 }

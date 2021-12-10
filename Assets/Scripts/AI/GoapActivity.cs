@@ -15,17 +15,24 @@ public class GoapActivity
         effects = new List<KeyValuePair<string, bool>>();
         weight = 0;
     }
+
     public bool CanDo(List<KeyValuePair<string, bool>> has)
     {
-        if (requires == null || requires.Count == 0) { return true; }
+        if (requires == null || requires.Count == 0) { Debug.Log("NoRequirements"); return true; }
         foreach (KeyValuePair<string, bool> item in requires)
         {
+            //Debug.Log(item);
             if (!has.Contains(item))
             {
+                //Debug.Log("Failed due to:" + item);
                 return false;
             }
         }
         return true;
+    }
+    public virtual void Reset()
+    {
+        done = false;
     }
     public void SetWeight(int w)
     {
@@ -38,6 +45,10 @@ public class GoapActivity
     public void AddRequirement(string key, bool value)
     {
         requires.Add(new KeyValuePair<string, bool>(key, value));
+    }
+    public void NoRequirements()
+    {
+        requires = new List<KeyValuePair<string, bool>>();
     }
     public void AddEffect(string key, bool value)
     {

@@ -92,6 +92,21 @@ public class ScrEnemyController : MonoBehaviour
         has_item = b;
     }
 
+    public void SetTarget(string target)
+    {
+        if (target == "player")
+        {
+            destination = GameObject.Find("Player").transform;
+        }
+        else
+        {
+            if (target == "item")
+            {
+                destination = GameObject.Find(ID).transform;
+            }
+        }
+    }
+
     /// <summary> method Attack
     /// Generates the enemys throwable and modifies their destination so they go and pick it up.
     /// </summary>
@@ -259,8 +274,8 @@ public class ScrEnemyController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        StateMachine();
-        IfNearThrown();
+        //StateMachine();
+        //IfNearThrown();
         if (attack_delay > 0)
         {
             attack_delay -= Time.deltaTime;

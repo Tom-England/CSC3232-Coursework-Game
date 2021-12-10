@@ -15,7 +15,7 @@ public class TargetPlayer : GoapActivity
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();
-        //control.SetTarget("player");
+        control.SetTarget("player");
         done = true;
     }
 }

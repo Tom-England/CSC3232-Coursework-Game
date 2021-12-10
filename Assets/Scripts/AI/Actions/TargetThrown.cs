@@ -15,7 +15,7 @@ public class TargetThrown : GoapActivity
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();
-        //control.SetTarget("item");
+        control.SetTarget("item");
         done = true;
     }
 }
