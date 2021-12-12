@@ -6,6 +6,11 @@ using System;
 using TMPro;
 public class ScrEnemyController : MonoBehaviour
 {
+    // Audio stuff
+    public ScrSoundController sound;
+    public AudioClip attack_sound;
+    public AudioClip hit_sound;
+
     // Variables for speaking system
     public TMP_Text text;
     public string[] messages;
@@ -65,6 +70,7 @@ public class ScrEnemyController : MonoBehaviour
         {
             SetDestination();
         }
+        sound = GameObject.Find("AudioSource").GetComponent<ScrSoundController>();
     }
 
     /// <summary> method SetDestination
@@ -107,6 +113,7 @@ public class ScrEnemyController : MonoBehaviour
     /// </summary>
     public void Attack()
     {
+        sound.PlayAt(attack_sound, transform.position);
         attack_delay = max_attack_delay;
         has_item = false;
         GameObject thrown;
@@ -208,6 +215,7 @@ public class ScrEnemyController : MonoBehaviour
     {
         if (other.gameObject.tag == "Attack")
         {
+            sound.PlayAt(hit_sound, transform.position);
             Speak();
             lives -= 1;
             if (lives <= 0)

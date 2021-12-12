@@ -70,8 +70,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dad6fac573aabc4897022729904770e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wants: []
-  needs: []
+  sound: {fileID: 0}
+  attack_sound: {fileID: 8300000, guid: 8348e5d6a4d089e4a8ad425e43e186e6, type: 3}
+  hit_sound: {fileID: 8300000, guid: f0c966131f4808b46b6f8221224310b0, type: 3}
   text: {fileID: 2486970967619992118}
   messages:
   - Ow!
