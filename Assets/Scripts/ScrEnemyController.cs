@@ -6,11 +6,6 @@ using System;
 using TMPro;
 public class ScrEnemyController : MonoBehaviour
 {
-
-    // GOAP
-    public string[] wants;
-    public string[] needs;
-
     // Variables for speaking system
     public TMP_Text text;
     public string[] messages;

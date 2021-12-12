@@ -20,23 +20,6 @@ class GoapAgent : MonoBehaviour
         activities.Add(new TargetThrown());
     }
 
-    /// <summary> method GenerateValidActivities
-    /// Generates the valid activites from the total activities
-    /// <returns>List of valid activities</returns>
-    /// </summary>
-    List<GoapActivity> GenerateValidActivities(List<KeyValuePair<string, bool>> has)
-    {
-        List<GoapActivity> valid = new List<GoapActivity>();
-        foreach (GoapActivity activity in activities)
-        {
-            if (activity.CanDo(has))
-            {
-                valid.Add(activity);
-            }
-        }
-        return valid;
-    }
-
     /// <summary> method FindHelpfulActivities
     /// Generates the valid activites that can lead to a goal activity
     /// <returns>List of valid activities</returns>
