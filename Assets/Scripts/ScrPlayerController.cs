@@ -9,6 +9,7 @@ public class ScrPlayerController : MonoBehaviour
     public ScrSoundController sound;
     public AudioClip attack_sound;
     public AudioClip hit_sound;
+    public AudioClip step_sound;
 
     public float max_speed = 10f;
     public float speed = 500f;
@@ -47,6 +48,7 @@ public class ScrPlayerController : MonoBehaviour
         {
             in_air = false;
             in_air_bob = false;
+            sound.PlayAt(step_sound, transform.position);
         }
     }
 
