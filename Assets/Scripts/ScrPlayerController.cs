@@ -207,8 +207,8 @@ public class ScrPlayerController : MonoBehaviour
             sound.PlayAt(attack_sound, transform.position);
             attackbox.SetActive(true);
             attack_time_on = max_attack_time_on;
-            Vector3 new_pos = new Vector3(tr.transform.position.x, tr.transform.position.y, -1);
-            tr.transform.position = new_pos;
+            Vector3 new_pos = new Vector3(tr.transform.localPosition.x, tr.transform.localPosition.y, tr.transform.localPosition.z * -1);
+            tr.transform.localPosition = new_pos;
             //Debug.Log("pow");
 
         }
