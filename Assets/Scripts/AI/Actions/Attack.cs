@@ -13,6 +13,9 @@ public class Attack : GoapActivity
         SetWeight(1);
     }
 
+    /// <summary> method DoActivity
+    /// Moves the agent to its destination then runs its attack method
+    /// </summary>
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();

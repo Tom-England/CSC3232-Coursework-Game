@@ -12,6 +12,9 @@ public class TargetThrown : GoapActivity
         SetWeight(1);
     }
 
+    /// <summary> method DoActivity
+    /// Sets the agents target to its thrown object
+    /// </summary>
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();

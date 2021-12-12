@@ -12,6 +12,9 @@ public class TargetPlayer : GoapActivity
         SetWeight(1);
     }
 
+    /// <summary> method DoActivity
+    /// Sets the agents target to the player
+    /// </summary>
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();

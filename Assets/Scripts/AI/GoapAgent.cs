@@ -10,6 +10,14 @@ class GoapAgent : MonoBehaviour
 
     int current_task_index = 0;
 
+    /// <summary> constructor GoapAgent
+    /// Constructor method for the class.
+    /// Creates an empty list to store fufilled requirements
+    /// Also adds the valid activities here as I couldn't add them
+    /// in the editor (It doesn't seem to count subclasses as their parent's type like C# does)
+    /// Move was removed as an activity as it was a bit redundant and caused some issues with ordering
+    /// however the activity itself did work.
+    /// </summary>
     public GoapAgent()
     {
         has = new List<KeyValuePair<string, bool>>();
@@ -101,6 +109,11 @@ class GoapAgent : MonoBehaviour
         return new_has;
     }
 
+    /// <summary> method FindTargetActivity
+    /// Selects the activity with the lowest weight from the 
+    /// activites that have the target as an effect
+    /// <returns>GoapActivity with a valid effect</returns>
+    /// </summary>
     GoapActivity FindTargetActivity(KeyValuePair<string, bool> target)
     {
         GoapActivity temp = activities[0];
@@ -136,7 +149,7 @@ class GoapAgent : MonoBehaviour
         // Step 1
         List<GoapActivity> valid = new List<GoapActivity>();
         GoapActivity best = FindTargetActivity(goal);
-        Debug.Log("Valid End Goal: " + best);
+        //Debug.Log("Valid End Goal: " + best);
         // Step 2
         path.Add(best);
 
@@ -170,11 +183,21 @@ class GoapAgent : MonoBehaviour
 
     }
 
+    /// <summary> method RunAgent
+    /// Handles the logic for the agent
+    /// This involves running each activity to completion
+    /// then generating a new path when the old one is complete
+    /// This implementation is only used for my simple AI so the 
+    /// goal activity just toggles between true and false
+    /// If there was more for them to do another function would be needed
+    /// to generate the goal.
+    /// 
+    /// </summary>
     void RunAgent()
     {
         if (path[current_task_index].Finished())
         {
-            Debug.Log("Finished Doing: " + path[current_task_index]);
+            //Debug.Log("Finished Doing: " + path[current_task_index]);
             path[current_task_index].Reset();
             has = UpdateHas(has, path[current_task_index].GetEffects());
             current_task_index += 1;
@@ -185,15 +208,15 @@ class GoapAgent : MonoBehaviour
                 current_task_index = 0;
                 goal = new KeyValuePair<string, bool>(goal.Key, !goal.Value);
                 OutputState(has);
-                Debug.Log("New Goal:" + goal);
+                //Debug.Log("New Goal:" + goal);
                 path = CalculatePathToGoal();
-                Debug.Log("New Path of length: " + path.Count);
-                for (int i = 0; i < path.Count; i++)
+                //Debug.Log("New Path of length: " + path.Count);
+                /*for (int i = 0; i < path.Count; i++)
                 {
                     Debug.Log(path[i]);
-                }
+                }*/
             }
-            else { Debug.Log("Starting doing: " + path[current_task_index]); }
+            //else { Debug.Log("Starting doing: " + path[current_task_index]); }
         }
         else
         {
@@ -209,12 +232,12 @@ class GoapAgent : MonoBehaviour
         has.Add(new KeyValuePair<string, bool>("playerTarget", true));
         goal = new KeyValuePair<string, bool>("hasItem", false);
         path = CalculatePathToGoal();
-        Debug.Log("Starting Path Output");
-        for (int i = 0; i < path.Count; i++)
+        //Debug.Log("Starting Path Output");
+        /*for (int i = 0; i < path.Count; i++)
         {
             Debug.Log(path[i]);
-        }
-        Debug.Log("Ending path output");
+        }*/
+        //Debug.Log("Ending path output");
     }
     void Update()
     {

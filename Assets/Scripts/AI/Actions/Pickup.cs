@@ -19,12 +19,20 @@ public class Pickup : GoapActivity
         delay = d;
     }
 
+    /// <summary> method Reset
+    /// Resets the done flag to false as usual but also resets the delay to 3 seconds
+    /// </summary>
     public override void Reset()
     {
         done = false;
         SetDelay(3);
     }
 
+    /// <summary> method DoActivity
+    /// Moves the agent to its destination then attempts pickup
+    /// if the delay is up.
+    /// delay prevents the object being picked up immediatly after being thrown
+    /// </summary>
     public override void DoActivity(GameObject agent)
     {
         ScrEnemyController control = agent.GetComponent<ScrEnemyController>();
